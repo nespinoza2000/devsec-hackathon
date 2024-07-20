@@ -1,22 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import openaiservice from "../services/openai.js";
-
-const Chatbot = ({ fetchPlaces }) => {
+import { Loader } from "./Loader/styles";
+const Chatbot = ({
+  fetchPlaces,
+  setLimited,
+  limited,
+  loading,
+  chatMessage,
+}) => {
   const [messages, setMessages] = useState([]); // Example { role: "system", content: "Hola, ¿qué lugares turisticos de Encarnación te gustaria visitar?" }, { role: "user", content: "Recomiendame lugares bailables." }, { role: "system", content: "Claro, estos son los..." }
   const [message, setMessage] = useState("");
 
-  const handleRequest = (message) => {
+  const handleRequest = async (message) => {
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: "user", content: message },
     ]);
+    setMessage("");
     // Call OpenAI API
-    fetchPlaces(message);
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { role: "system", content: "Claro, te he añadido los puntos en el mapa" },
-    ]);
+    await fetchPlaces(message);
   };
+
+  useEffect(() => {
+    if (chatMessage) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { role: "system", content: chatMessage },
+      ]);
+    }
+  }, [chatMessage]);
 
   return (
     <div>
@@ -54,12 +66,26 @@ const Chatbot = ({ fetchPlaces }) => {
       >
         {/* Heading */}
         <div className="flex flex-col space-y-1.5 pb-6">
-          <h2 className="font-semibold text-lg tracking-tight">Chatbot</h2>
-          <p className="text-sm text-[#6b7280] leading-3">
-            Powered by Mendable and Vercel
-          </p>
+          <div className="justify-between">
+            <div>
+              <h2 className="font-semibold text-lg tracking-tight">Chatbot</h2>
+              <p className="text-sm text-[#6b7280] leading-3">
+                Powered by Mendable and Vercel
+              </p>
+            </div>
+            <div>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={limited}
+                  onChange={(e) => setLimited(e.target.checked)}
+                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                />
+                <span className="ml-2 text-gray-700">Limited</span>
+              </label>
+            </div>
+          </div>
         </div>
-
         {/* Chat Container */}
         <div
           className="pr-4 h-[474px]"
@@ -123,8 +149,13 @@ const Chatbot = ({ fetchPlaces }) => {
               </div>
             )
           )}
+          {loading && (
+            <div style={{ height: "2rem" }}>
+              {" "}
+              <Loader />{" "}
+            </div>
+          )}
         </div>
-
         {/* Message Input */}
         <div className="w-full flex items-center border-t py-2">
           <input

@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@headlessui/react": "^0.0.0-insiders.ff41b27",
     "@material-tailwind/react": "^2.1.9",
+    "@mui/material": "^5.16.4",
     "@react-google-maps/api": "^2.19.3",
     "@vis.gl/react-google-maps": "^1.1.0",
     "axios": "^1.7.2",
@@ -20,7 +23,8 @@
     "openai": "^4.52.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "socket.io-client": "^4.7.5"
+    "socket.io-client": "^4.7.5",
+    "styled-components": "^6.1.12"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

@@ -8,6 +8,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { Circle } from "./Circle.jsx";
+import POIModal from "./POIModal.jsx";
 
 const center = {
   lat: -27.33056,
@@ -43,10 +44,20 @@ const MapComponent = ({ locations = [] }) => {
 
 const PoiMarkers = ({ locations = [] }) => {
   const map = useMap();
+  const [open, setOpen] = useState(false);
+  const [poiData, setPoiData] = useState("");
+
   const [markers, setMarkers] = useState({});
   const clusterer = useRef(null);
   const [circleCenter, setCircleCenter] = useState(null);
+  const handleOpen = (data) => {
+    setPoiData(data);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+
   const handleClick = useCallback((ev, poi) => {
+    handleOpen(poi);
     console.log(ev, poi);
     if (!map) return;
     if (!ev.latLng) return;
@@ -83,6 +94,7 @@ const PoiMarkers = ({ locations = [] }) => {
   };
   return (
     <>
+      <POIModal open={open} handleClose={handleClose} poiData={poiData} />
       <Circle
         radius={800}
         center={circleCenter}
