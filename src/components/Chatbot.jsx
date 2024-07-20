@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import openaiservice from "../services/openai.js";
 import { Loader } from "./Loader/styles";
 import { stepLabelClasses } from "@mui/material";
@@ -12,7 +12,7 @@ const Chatbot = ({
 }) => {
   const [messages, setMessages] = useState([]); // Example { role: "system", content: "Hola, ¿qué lugares turisticos de Encarnación te gustaria visitar?" }, { role: "user", content: "Recomiendame lugares bailables." }, { role: "system", content: "Claro, estos son los..." }
   const [message, setMessage] = useState("");
-
+  const bottomRef = useRef(null);
   const handleRequest = async (message) => {
     setPlaces([]);
     setMessages((prevMessages) => [
@@ -24,12 +24,18 @@ const Chatbot = ({
     await fetchPlaces(message);
   };
 
+  function focusRef() {
+    if (bottomRef.current) {
+      bottomRef.current.focus();
+    }
+  }
   useEffect(() => {
     if (chatMessage) {
       setMessages((prevMessages) => [
         ...prevMessages,
         { role: "system", content: chatMessage },
       ]);
+      focusRef();
     }
   }, [chatMessage]);
   return (
@@ -98,6 +104,7 @@ const Chatbot = ({
               <Loader />{" "}
             </div>
           )}
+          <div id="bottomRef" ref={bottomRef} tabIndex="-1"></div>
         </div>
         <div className="w-full flex items-center border-t py-2">
           <input
