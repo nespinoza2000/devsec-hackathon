@@ -1,32 +1,23 @@
-import { useState, useEffect } from "react";
 import MapComponent from "./components/Map.jsx";
 import { Loading } from "./components/Loading.jsx";
-import Chatbot from "./components/Chatbot.jsx";
 import openaiService from "./services/openai.js";
+import Chatbot from "./components/Chatbot.jsx";
 
+import { useState } from "react";
 const App = () => {
-  const [places, setPlaces] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  const [places, setPlaces] = useState([{}]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setPlaces([{ key: "1", location: { lat: -27.33056, lng: -55.86667 } }]);
-      setLoading(false);
-    };
+  const fetchPlaces = async (prompt) => {
+    try {
+      const parsedPlaces = await openaiService.getPlacesAI(prompt);
 
-    fetchData();
-  }, []);
-
-  const getPlaces = async (prompt) => {
-    const parsedPlaces = await openaiService.getPlacesAI(prompt);
-    console.log(parsedPlaces);
-    setPlaces(parsedPlaces);
+      setPlaces(parsedPlaces);
+      console.log(parsedPlaces);
+    } catch (error) {
+      console.error("Error fetching places:", error);
+    }
   };
-
-  useEffect(() => {
-    getPlaces("Muestrame los 10 mejores lugares de tecnología en Encarnación");
-  }, []);
   return (
     <>
       <div className="App h-screen flex flex-col bg-gradient-to-r from-blue-400 to-green-600">
@@ -37,10 +28,10 @@ const App = () => {
         </header>
         <div className="flex flex-1">
           <div className="w-2/3 p-4">
-            <MapComponent />
+            <MapComponent locations={places} />
           </div>
           <div className="w-1/3 p-4">
-            <Chatbot />
+            <Chatbot fetchPlaces={fetchPlaces} />
           </div>
         </div>
       </div>

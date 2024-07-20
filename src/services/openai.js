@@ -90,6 +90,7 @@ const getPlacesLimited = async (prompt) => {
     .on("message", (message) => console.log(message));
 
   const finalContent = await runner.finalFunctionCall();
+  console.log(finalContent);
 
   const args = finalContent.arguments;
   const places = JSON.parse(args).places;
@@ -113,7 +114,7 @@ const getPlacesAI = async (prompt) => {
     .on("message", (message) => console.log(message));
 
   const finalContent = await runner.finalFunctionCall();
-
+  console.log(finalContent, "Final content");
   const args = finalContent.arguments;
   const places = JSON.parse(args).places;
   return places;
