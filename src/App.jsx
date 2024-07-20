@@ -21,10 +21,11 @@ const App = () => {
       console.log(parsedPlaces, chatResponse);
       setResponse(chatResponse);
       setPlaces(parsedPlaces);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching places:", error);
       setResponse("Algo salió mal, por favor intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,10 +33,18 @@ const App = () => {
     <div className="App h-screen flex bg-gradient-to-r from-blue-400 to-green-600">
       <div className="flex flex-1">
         <div className="w-2/3 p-4 h-full">
-          <MapComponent locations={places} />
+          <MapComponent locations={places ? places : []} />
         </div>
         <div className="w-1/3 p-4 h-full">
-          <Chatbot fetchPlaces={fetchPlaces} />
+          <Chatbot
+            fetchPlaces={fetchPlaces}
+            setLimited={setLimited}
+            limited={limited}
+            loading={loading}
+            response={response}
+            chatMessage={response}
+            setPlaces={setPlaces}
+          />
         </div>
       </div>
     </div>

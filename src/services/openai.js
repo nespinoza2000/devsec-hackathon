@@ -96,7 +96,7 @@ const getPlacesLimited = async (prompt) => {
 
   const args = finalContent.arguments;
   const parsedPlaces = JSON.parse(args)?.places;
-  const chatResponse = await openai.chat.completions.create({
+  const response = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
@@ -115,6 +115,11 @@ const getPlacesLimited = async (prompt) => {
     frequency_penalty: 0,
     presence_penalty: 0,
   });
+  const chatResponse = response
+    ? response.choices[0].message.content
+    : parsedPlaces.lenght > 1
+    ? "Claro! Te recomiendo estos lugares"
+    : "Algo ha salido mal :C";
   return { parsedPlaces, chatResponse };
 };
 
