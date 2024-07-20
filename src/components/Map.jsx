@@ -16,7 +16,7 @@ const center = {
 
 const MapComponent = ({ locations = [] }) => {
   return (
-    <div className="map">
+    <div className="h-full w-full">
       <APIProvider
         apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
         onLoad={() => console.log("Maps API has loaded.")}
@@ -33,6 +33,7 @@ const MapComponent = ({ locations = [] }) => {
             )
           }
           mapId="da37f3254c6a6d1c"
+          style={{ height: "100%", width: "100%" }}
         >
           <PoiMarkers locations={locations} />
         </Map>
