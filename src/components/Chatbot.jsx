@@ -157,12 +157,10 @@ const Chatbot = ({
           )}
         </div>
         {/* Message Input */}
-        <div className="w-full flex items-center border-t py-2">
+        <div className="w-full flex items-center border-t py-2 bg-white border-t-[#e5e7eb]">
           <input
             type="text"
             placeholder="Type a message..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
             className="flex-1 border-none p-2 text-gray-700 focus:outline-none"
           />
           <button
